@@ -41,7 +41,7 @@ namespace HousePriceModelTrainer
         public float Rooms;
     }
 
-    //Valores a Predecir
+    //Values to Predict
     public class HousePricePrediction
     {
         [ColumnName("Score")]

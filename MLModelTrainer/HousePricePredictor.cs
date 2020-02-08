@@ -5,25 +5,26 @@ namespace HousePriceModelTrainer
 {
     public static class HousePricePredictor
     {
+        //Makes Predictions From a Multiple Samples at Once
         public static float[] PredictSinglePriceSet(HouseDataModel[] houseData)
         {
-            //Crea un Objeto tipo MLContext para Utilizar el Framework de ML.NET
+            //Create an MLContext Object Using the Microsoft ML.NET Framework
             MLContext mlContext = new MLContext();
 
-            //Crea un DataView a partir del Arreglo de Objetos de tipo HouseData
+            //Creates an IDataView using Supplied HouseData Array (Input Data for Predictions)
             IDataView data = mlContext.Data.LoadFromEnumerable(houseData);
 
-            //Carga los Datos y Prepara los Objetos para el Pipeline y el Modelo Entrenado
+            //Load Data Pipeline and Model to Predict
             ITransformer dataPrepPipeline = mlContext.Model.Load(Constants.DataTransformerPath, out _);
             ITransformer trainedModel = mlContext.Model.Load(Constants.ModelPath, out _);
 
-            //Transforma la Data para Utilizar en las Predicciones
+            //Transforms Input Data Using Data Pipeline
             var transformedData = dataPrepPipeline.Transform(data);
 
-            //Usa los Datos Transformados para Producir un Set de Predicciones
+            //Uses Transformed Data to Predict Prices
             var predictedPrices = trainedModel.Transform(transformedData);
 
-            //Obtiene los Resultados y los Almacena en un Arreglo
+            //Get Predicted Results and Generates an Output Prices Array
             float[] results = new float[houseData.Length];
             var scoreColumn = predictedPrices.GetColumn<float>("Score");
 
@@ -36,6 +37,7 @@ namespace HousePriceModelTrainer
             return results;
         }
 
+        //Makes Predictions From a Single Sample
         public static float PredictSinglePrice(HouseDataModel houseData)
         {
             return PredictSinglePriceSet(new HouseDataModel[] { houseData })[0];

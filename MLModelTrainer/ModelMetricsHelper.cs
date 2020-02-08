@@ -7,6 +7,7 @@ namespace HousePriceModelTrainer
 {
     class ModelMetricsHelper
     {
+        //Prints Model Quality Metrics
         public static void PrintRegressionFoldsAverageMetrics(string algorithmName, IReadOnlyList<TrainCatalogBase.CrossValidationResult<RegressionMetrics>> crossValidationResults)
         {
             Console.WriteLine($"**********************************************");
